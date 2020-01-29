@@ -162,9 +162,10 @@ prepackaged-plugins: ## Populate the prepackaged-plugins directory
 	done
 
 prepackaged-binaries: ## Populate the prepackaged-binaries to the bin directory
-	@echo Downloading prepackaged binaries
-	curl -f -O -L https://github.com/mattermost/mmctl/releases/latest -o $(DIST_PATH)/bin/mmctl
-	chmod +x $(DIST_PATH)/bin/mmctl
+	@echo Downloading prepackaged binary: https://github.com/mattermost/mmctl/releases/$$(./scripts/get_latest_release.sh "mattermost/mmctl")
+	curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/linux_amd64.tar
+	tar -xvf linux_amd64.tar -C $(GOBIN)
+	rm linux_amd64.tar
 
 golangci-lint: ## Run golangci-lint on codebase
 # https://stackoverflow.com/a/677212/1027058 (check if a command exists or not)
