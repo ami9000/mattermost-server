@@ -94,6 +94,13 @@ PLUGIN_PACKAGES += mattermost-plugin-jira-v2.3.2
 PLUGIN_PACKAGES += mattermost-plugin-gitlab-v1.0.1
 PLUGIN_PACKAGES += mattermost-plugin-jenkins-v1.0.0
 
+# Externally built binaries
+ifeq ($(UNAME),Darwin)
+	MMCTL_FILE := darwin_amd64.tar
+else
+	MMCTL_FILE := linux_amd64.tar
+endif
+
 # Prepares the enterprise build if exists. The IGNORE stuff is a hack to get the Makefile to execute the commands outside a target
 ifeq ($(BUILD_ENTERPRISE_READY),true)
 	IGNORE:=$(shell echo Enterprise build selected, preparing)
@@ -162,10 +169,14 @@ prepackaged-plugins: ## Populate the prepackaged-plugins directory
 	done
 
 prepackaged-binaries: ## Populate the prepackaged-binaries to the bin directory
-	@echo Downloading prepackaged binary: https://github.com/mattermost/mmctl/releases/$$(./scripts/get_latest_release.sh "mattermost/mmctl")
-	curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/linux_amd64.tar
-	tar -xvf linux_amd64.tar -C $(GOBIN)
-	rm linux_amd64.tar
+ifeq (,$(wildcard bin/mmctl))
+	@echo Downloading prepackaged binary: https://github.com/mattermost/mmctl/releases/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$(MMCTL_FILE)
+	curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$(MMCTL_FILE)
+	tar -xvf $(MMCTL_FILE) -C $(GOBIN)
+	rm $(MMCTL_FILE)
+else
+	@echo mmctl installed
+endif
 
 golangci-lint: ## Run golangci-lint on codebase
 # https://stackoverflow.com/a/677212/1027058 (check if a command exists or not)
