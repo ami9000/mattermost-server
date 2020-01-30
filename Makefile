@@ -2,6 +2,7 @@
 
 ROOT := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
+PLATFORM := $(shell uname)
 IS_CI ?= false
 MM_NO_DOCKER ?= false
 # Build Flags
@@ -95,7 +96,7 @@ PLUGIN_PACKAGES += mattermost-plugin-gitlab-v1.0.1
 PLUGIN_PACKAGES += mattermost-plugin-jenkins-v1.0.0
 
 # Externally built binaries
-ifeq ($(UNAME),Darwin)
+ifeq ($(PLATFORM),Darwin)
 	MMCTL_FILE := darwin_amd64.tar
 else
 	MMCTL_FILE := linux_amd64.tar
