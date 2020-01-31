@@ -95,12 +95,6 @@ PLUGIN_PACKAGES += mattermost-plugin-jira-v2.3.2
 PLUGIN_PACKAGES += mattermost-plugin-gitlab-v1.0.1
 PLUGIN_PACKAGES += mattermost-plugin-jenkins-v1.0.0
 
-# Externally built binaries
-ifeq ($(PLATFORM),Darwin)
-	MMCTL_FILE := darwin_amd64.tar
-else
-	MMCTL_FILE := linux_amd64.tar
-endif
 
 # Prepares the enterprise build if exists. The IGNORE stuff is a hack to get the Makefile to execute the commands outside a target
 ifeq ($(BUILD_ENTERPRISE_READY),true)
@@ -170,6 +164,12 @@ prepackaged-plugins: ## Populate the prepackaged-plugins directory
 	done
 
 prepackaged-binaries: ## Populate the prepackaged-binaries to the bin directory
+# Externally built binaries
+ifeq ($(PLATFORM),Darwin)
+	MMCTL_FILE = darwin_amd64.tar
+else
+	MMCTL_FILE = linux_amd64.tar
+endif
 ifeq (,$(wildcard bin/mmctl))
 	@echo Downloading prepackaged binary: https://github.com/mattermost/mmctl/releases/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$(MMCTL_FILE)
 	curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$(MMCTL_FILE)

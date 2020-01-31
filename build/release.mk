@@ -97,9 +97,11 @@ endif
 ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")
 	cp $(GOBIN)/mattermost $(DIST_PATH)/bin # from native bin dir, not cross-compiled
 	cp $(GOBIN)/platform $(DIST_PATH)/bin # from native bin dir, not cross-compiled
+	cp $(GOBIN)/mmctl $(DIST_PATH)/bin # from native bin dir, not cross-compiled
 else
 	cp $(GOBIN)/darwin_amd64/mattermost $(DIST_PATH)/bin # from cross-compiled bin dir
 	cp $(GOBIN)/darwin_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
+	MMCTL_FILE="darwin_amd64.tar" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$$MMCTL_FILE && tar -xvf $$MMCTL_FILE -C $(DIST_PATH)/bin && rm $$MMCTL_FILE
 endif
 	@# Prepackage plugins
 	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
@@ -122,6 +124,7 @@ endif
 	@# Cleanup
 	rm -f $(DIST_PATH)/bin/mattermost
 	rm -f $(DIST_PATH)/bin/platform
+	rm -f $(DIST_PATH)/bin/mmctl
 	rm -f $(DIST_PATH)/prepackaged_plugins/*
 
 	@# Make windows package
@@ -129,9 +132,11 @@ endif
 ifeq ($(BUILDER_GOOS_GOARCH),"windows_amd64")
 	cp $(GOBIN)/mattermost.exe $(DIST_PATH)/bin # from native bin dir, not cross-compiled
 	cp $(GOBIN)/platform.exe $(DIST_PATH)/bin # from native bin dir, not cross-compiled
+	cp $(GOBIN)/mmctl.exe $(DIST_PATH)/bin # from native bin dir, not cross-compiled
 else
 	cp $(GOBIN)/windows_amd64/mattermost.exe $(DIST_PATH)/bin # from cross-compiled bin dir
 	cp $(GOBIN)/windows_amd64/platform.exe $(DIST_PATH)/bin # from cross-compiled bin dir
+	MMCTL_FILE="windows_amd64.zip" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$$MMCTL_FILE && unzip -o $$MMCTL_FILE -d $(DIST_PATH)/bin && rm $$MMCTL_FILE
 endif
 	@# Prepackage plugins
 	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
@@ -154,16 +159,19 @@ endif
 	@# Cleanup
 	rm -f $(DIST_PATH)/bin/mattermost.exe
 	rm -f $(DIST_PATH)/bin/platform.exe
+	rm -f $(DIST_PATH)/bin/mmctl.exe
 	rm -f $(DIST_PATH)/prepackaged_plugins/*
 
 	@# Make linux package
 	@# Copy binary
 ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
 	cp $(GOBIN)/mattermost $(DIST_PATH)/bin # from native bin dir, not cross-compiled
+	cp $(GOBIN)/mmctl $(DIST_PATH)/bin # from native bin dir, not cross-compiled
 	cp $(GOBIN)/platform $(DIST_PATH)/bin # from native bin dir, not cross-compiled
 else
 	cp $(GOBIN)/linux_amd64/mattermost $(DIST_PATH)/bin # from cross-compiled bin dir
 	cp $(GOBIN)/linux_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
+	MMCTL_FILE="linux_amd64.tar" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$$MMCTL_FILE && tar -xvf $$MMCTL_FILE -C $(DIST_PATH)/bin && rm $$MMCTL_FILE
 endif
 	@# Prepackage plugins
 	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
