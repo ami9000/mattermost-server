@@ -90,6 +90,7 @@ endif
 		done; \
 	done
 
+
 	@# ----- PLATFORM SPECIFIC -----
 
 	@# Make osx package
@@ -101,7 +102,7 @@ ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")
 else
 	cp $(GOBIN)/darwin_amd64/mattermost $(DIST_PATH)/bin # from cross-compiled bin dir
 	cp $(GOBIN)/darwin_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
-	MMCTL_FILE="darwin_amd64.tar" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$$MMCTL_FILE && tar -xvf $$MMCTL_FILE -C $(DIST_PATH)/bin && rm $$MMCTL_FILE
+	MMCTL_FILE="darwin_amd64.tar" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$(REL_TO_DOWNLOAD)/$$MMCTL_FILE && tar -xvf $$MMCTL_FILE -C $(DIST_PATH)/bin && rm $$MMCTL_FILE
 endif
 	@# Prepackage plugins
 	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
@@ -136,7 +137,7 @@ ifeq ($(BUILDER_GOOS_GOARCH),"windows_amd64")
 else
 	cp $(GOBIN)/windows_amd64/mattermost.exe $(DIST_PATH)/bin # from cross-compiled bin dir
 	cp $(GOBIN)/windows_amd64/platform.exe $(DIST_PATH)/bin # from cross-compiled bin dir
-	MMCTL_FILE="windows_amd64.zip" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$$MMCTL_FILE && unzip -o $$MMCTL_FILE -d $(DIST_PATH)/bin && rm $$MMCTL_FILE
+	MMCTL_FILE="windows_amd64.zip" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$(REL_TO_DOWNLOAD)/$$MMCTL_FILE && unzip -o $$MMCTL_FILE -d $(DIST_PATH)/bin && rm $$MMCTL_FILE
 endif
 	@# Prepackage plugins
 	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
@@ -171,7 +172,7 @@ ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
 else
 	cp $(GOBIN)/linux_amd64/mattermost $(DIST_PATH)/bin # from cross-compiled bin dir
 	cp $(GOBIN)/linux_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
-	MMCTL_FILE="linux_amd64.tar" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$$(./scripts/get_latest_release.sh "mattermost/mmctl")/$$MMCTL_FILE && tar -xvf $$MMCTL_FILE -C $(DIST_PATH)/bin && rm $$MMCTL_FILE
+	MMCTL_FILE="linux_amd64.tar" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$(REL_TO_DOWNLOAD)/$$MMCTL_FILE && tar -xvf $$MMCTL_FILE -C $(DIST_PATH)/bin && rm $$MMCTL_FILE
 endif
 	@# Prepackage plugins
 	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
