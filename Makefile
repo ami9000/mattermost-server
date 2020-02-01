@@ -124,7 +124,8 @@ all: run ## Alias for 'run'.
 
 # Decide what version of prebuilt binaries to download. This will use the release-* branch names or change to the latest.
 # The second sed will look for v<NUM>.<NUM>* and if its not found replace it with the word latest
-REL_TO_DOWNLOAD = $(shell git rev-parse --abbrev-ref HEAD | sed 's/release-/v/' | sed '/v\([0-9]\)\./! s/\(.*\)/latest/')
+LATEST_RELEASE_MMCTL = $(shell scripts/get_latest_release.sh 'mattermost/mmctl')
+REL_TO_DOWNLOAD = $(shell git rev-parse --abbrev-ref HEAD | sed 's/release-/v/' | sed '/v\([0-9]\)\./! s/\(.*\)/$(LATEST_RELEASE_MMCTL)/')
 
 include build/*.mk
 
